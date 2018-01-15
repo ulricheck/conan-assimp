@@ -9,7 +9,9 @@ class AssimpConan(ConanFile):
     license = "MIT"
     url = "https://github.com/ulricheck/conan-assimp"
     description = "Conan package for Assmip"
-    requires = "zlib/[>=1.2.11]@camposs/stable"
+    requires = (
+        "zlib/[>=1.2.11]@camposs/stable", 
+        )
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
@@ -39,14 +41,13 @@ conan_basic_setup()''')
         cmake.install()
 
     def package(self):
-        # self.copy("*.h", dst="include", src="assimp-3.3.1/include")
-        # self.copy("*.hpp", dst="include", src="assimp-3.3.1/include")
-        # self.copy("*.inl", dst="include", src="assimp-3.3.1/include")
-        # self.copy("*assimp.lib", dst="lib", keep_path=False)
-        # self.copy("*.dll", dst="bin", keep_path=False)
-        # self.copy("*.so", dst="lib", keep_path=False)
-        # self.copy("*.a", dst="lib", keep_path=False)
-        pass
+        self.copy("*.h", dst="include", src="source/include")
+        self.copy("*.hpp", dst="include", src="source/include")
+        self.copy("*.inl", dst="include", src="source/include")
+        self.copy("*assimp.lib", dst="lib", keep_path=False)
+        self.copy("*.dll", dst="bin", keep_path=False)
+        self.copy("*.so", dst="lib", keep_path=False)
+        self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ["assimp"]
