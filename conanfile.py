@@ -31,6 +31,7 @@ conan_basic_setup()''')
 
     def build(self):
         cmake = CMake(self)
+
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.definitions["ASSIMP_BUILD_TESTS"] = False
         cmake.definitions["ASSIMP_BUILD_SAMPLES"] = False
