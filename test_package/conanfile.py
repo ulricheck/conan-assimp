@@ -19,7 +19,9 @@ class AssimpTestConan(ConanFile):
         with tools.environment_append(RunEnvironment(self).vars):
             bin_path = os.path.join("bin", "example")
             if self.settings.os == "Windows":
-                self.run(bin_path)
+                # XXX currently disabled - it compiles, but cannot be executed on appveyor ..
+                #self.run(bin_path)
+                self.output.warn("Executing the test is currently disabled on Windows.")
             elif self.settings.os == "Macos":
                 self.run("DYLD_LIBRARY_PATH=%s %s" % (os.environ.get('DYLD_LIBRARY_PATH', ''), bin_path))
             else:
