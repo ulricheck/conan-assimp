@@ -3,7 +3,7 @@ import os
 
 class AssimpTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    requires = "Assimp/3.3.1@jacmoe/stable", "zlib/1.2.8@lasote/stable"
+    requires = "assimp/4.1.0@camposs/stable", "zlib/1.3.11@camposs/stable"
     generators = "cmake"
 
     def build(self):

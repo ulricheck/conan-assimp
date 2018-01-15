@@ -4,12 +4,12 @@ import os
 
 
 class AssimpConan(ConanFile):
-    name = "Assimp"
-    version = "3.3.1"
+    name = "assimp"
+    version = "4.1.0"
     license = "MIT"
-    url = "https://github.com/jacmoe/conan-assimp"
+    url = "https://github.com/ulricheck/conan-assimp"
     description = "Conan package for Assmip"
-    requires = "zlib/1.2.8@lasote/stable"
+    requires = "zlib/[>=1.2.11]@camposs/stable"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=False"
@@ -20,29 +20,33 @@ class AssimpConan(ConanFile):
         download("https://github.com/assimp/assimp/archive/%s" % zip_name, zip_name, verify=False)
         unzip(zip_name)
         os.unlink(zip_name)
-        self.run("cd assimp-3.3.1")
+        os.rename("assimp-%s" % self.version, "source")
         # This small hack might be useful to guarantee proper /MT /MD linkage in MSVC
         # if the packaged project doesn't have variables to set it properly
-        tools.replace_in_file("assimp-3.3.1/CMakeLists.txt", "PROJECT( Assimp )", '''PROJECT( Assimp )
+        tools.replace_in_file("source/CMakeLists.txt", "PROJECT( Assimp )", '''PROJECT( Assimp )
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()''')
 
     def build(self):
         cmake = CMake(self)
-        shared = "-DBUILD_SHARED_LIBS=ON" if self.options.shared else ""
-        assoptions = "-DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_SAMPLES=OFF"
-        fixes = "-DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC"
-        self.run('cmake assimp-3.3.1 %s %s %s %s' % (cmake.command_line, shared, assoptions, fixes))
-        self.run("cmake --build . %s" % cmake.build_config)
+        cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
+        cmake.definitions["ASSIMP_BUILD_TESTS"] = False
+        cmake.definitions["ASSIMP_BUILD_SAMPLES"] = False
+        cmake.definitions["CMAKE_CXX_FLAGS"] = "-fPIC"
+        cmake.definitions["CMAKE_C_FLAGS"] = "-fPIC"
+        cmake.configure(source_dir="source")
+        cmake.build()
+        cmake.install()
 
     def package(self):
-        self.copy("*.h", dst="include", src="assimp-3.3.1/include")
-        self.copy("*.hpp", dst="include", src="assimp-3.3.1/include")
-        self.copy("*.inl", dst="include", src="assimp-3.3.1/include")
-        self.copy("*assimp.lib", dst="lib", keep_path=False)
-        self.copy("*.dll", dst="bin", keep_path=False)
-        self.copy("*.so", dst="lib", keep_path=False)
-        self.copy("*.a", dst="lib", keep_path=False)
+        # self.copy("*.h", dst="include", src="assimp-3.3.1/include")
+        # self.copy("*.hpp", dst="include", src="assimp-3.3.1/include")
+        # self.copy("*.inl", dst="include", src="assimp-3.3.1/include")
+        # self.copy("*assimp.lib", dst="lib", keep_path=False)
+        # self.copy("*.dll", dst="bin", keep_path=False)
+        # self.copy("*.so", dst="lib", keep_path=False)
+        # self.copy("*.a", dst="lib", keep_path=False)
+        pass
 
     def package_info(self):
         self.cpp_info.libs = ["assimp"]

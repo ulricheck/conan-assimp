@@ -1,35 +1,48 @@
-[ ![Download](https://api.bintray.com/packages/jacmoe/Conan/Assimp%3Ajacmoe/images/download.svg) ](https://bintray.com/jacmoe/Conan/Assimp%3Ajacmoe/_latestVersion)
+## This repository holds a conan recipe for assimp.
 
-Travis : [![Build Status](https://travis-ci.org/jacmoe/conan-assimp.svg?branch=master)](https://travis-ci.org/jacmoe/conan-assimp)
+[Conan.io](https://conan.io) package for [the assimp C++ library](https://github.com/assimp/assimp) project
 
-AppVeyor : [![Build status](https://ci.appveyor.com/api/projects/status/tsymtu12n2txr0um/branch/master?svg=true)](https://ci.appveyor.com/project/jacmoe/conan-assimp/branch/master)
-
-
-# conan-assimp
-Conan.io package for Assimp
+## For Users: Use this package
 
 ### Basic setup
 
-```
-$ conan install Assimp/3.3.1@jacmoe/testing
-```
+    $ conan install assimp/4.1.0@camposs/stable
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
-```
-    [requires]
-    Assimp/3.3.1@jacmoe/testing
 
-    [options]
-    Assimp:shared=true # false
+    [requires]
+    assimp/4.1.0@camposs/stable
 
     [generators]
     txt
-    cmake
-```
+
 Complete the installation of requirements for your project running:
-```
-    conan install .
-```
-Project setup installs the library (and all his dependencies) and generates the files *conanbuildinfo.txt* and *conanbuildinfo.cmake* with all the paths and variables that you need to link with your dependencies.
+
+    $ mkdir build && cd build && conan install ..
+    
+Note: It is recommended that you run conan install from a build directory and not the root of the project directory.  This is because conan generates *conanbuildinfo* files specific to a single build configuration which by default comes from an autodetected default profile located in ~/.conan/profiles/default .  If you pass different build configuration options to conan install, it will generate different *conanbuildinfo* files.  Thus, they shoudl not be added to the root of the project, nor committed to git. 
+
+## For Packagers: Publish this Package
+
+The example below shows the commands used to publish to ulricheck conan repository. To publish to your own conan respository (for example, after forking this git repository), you will need to change the commands below accordingly. 
+
+## Build  
+
+This is a header only library, so nothing needs to be built.
+
+## Package 
+
+    $ conan create camposs/stable
+    
+## Add Remote
+
+    $ conan remote add camp "https://conan.campar.in.tum.de" True
+
+## Upload
+
+    $ conan upload -r camp assimp/4.1.0@camposs/stable
+
+### License
+[License](https://raw.githubusercontent.com/assimp/assimp-c/master/COPYING)

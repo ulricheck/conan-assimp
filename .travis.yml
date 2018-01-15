@@ -1,49 +1,44 @@
-os: linux
-services:
-   - docker
-sudo: required
-language: python
-env:
-  global:
-    - CONAN_UPLOAD="https://api.bintray.com/conan/jacmoe/Conan"
-    - CONAN_REFERENCE="Assimp/3.3.1"
-    - CONAN_USERNAME="jacmoe"
-    - CONAN_CHANNEL="stable"
 
+env:
+   global:
+     - CONAN_REFERENCE: "assimp/4.1.0"
+     - CONAN_USERNAME: "camposs"
+     - CONAN_LOGIN_USERNAME: "camposs"
+     - CONAN_CHANNEL: "stable"
+     - CONAN_UPLOAD: "https://conan.campar.in.tum.de"
+     - CONAN_STABLE_BRANCH_PATTERN: "release/*"
+     - CONAN_UPLOAD_ONLY_WHEN_STABLE: 1 # Will only upload when the branch matches "release/*"
+
+linux: &linux
+   os: linux
+   sudo: required
+   language: python
+   python: "3.6"
+   services:
+     - docker
+osx: &osx
+   os: osx
+   language: generic
 matrix:
    include:
-      - os: linux
-        services:
-          - docker
-        sudo: required
-        language: python
-        env: CONAN_GCC_VERSIONS=4.9 CONAN_USE_DOCKER=1
-      - os: linux
-        services:
-          - docker
-        sudo: required
-        language: python
-        env: CONAN_GCC_VERSIONS=5.4 CONAN_USE_DOCKER=1
-      - os: linux
-        services:
-          - docker
-        sudo: required
-        language: python
-        env: CONAN_GCC_VERSIONS=6.3 CONAN_USE_DOCKER=1   
-      #- os: osx 
-      #  osx_image: xcode8.3 # apple-clang 8.1
-      #  language: generic
-      #  env: CONAN_APPLE_CLANG_VERSIONS=8.1 # CONAN_CURRENT_PAGE=apple-clang_81   
-      #- os: osx 
-      #  osx_image: xcode8.2  # apple-clang 8.0
-      #  language: generic
-      #  env: CONAN_APPLE_CLANG_VERSIONS=8.0 # CONAN_CURRENT_PAGE=apple-clang_80    
+      - <<: *osx
+        osx_image: xcode9
+        env: CONAN_APPLE_CLANG_VERSIONS=9.0
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=4.9 CONAN_DOCKER_IMAGE=lasote/conangcc49
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=5 CONAN_DOCKER_IMAGE=lasote/conangcc54
+      - <<: *linux
+        env: CONAN_GCC_VERSIONS=6 CONAN_DOCKER_IMAGE=lasote/conangcc63
 
-before_install:
- - chmod +x ./.travis/install.sh
- - chmod +x ./.travis/run.sh
+before_script:
+  # See https://github.com/travis-ci/travis-ci/issues/4704. If this gets fixed, this line can also be removed. 
+  - python -c 'import os,sys,fcntl; flags = fcntl.fcntl(sys.stdout, fcntl.F_GETFL); fcntl.fcntl(sys.stdout, fcntl.F_SETFL, flags&~os.O_NONBLOCK);'
 
 install:
+  - chmod +x .travis/install.sh
   - ./.travis/install.sh
+
 script:
+  - chmod +x .travis/run.sh
   - ./.travis/run.sh
