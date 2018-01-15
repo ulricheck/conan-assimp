@@ -5,7 +5,7 @@ import os
 
 class AssimpConan(ConanFile):
     name = "assimp"
-    version = "4.1.0"
+    version = "3.3.1"
     license = "MIT"
     url = "https://github.com/ulricheck/conan-assimp"
     description = "Conan package for Assmip"

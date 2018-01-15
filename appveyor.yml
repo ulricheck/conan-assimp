@@ -5,7 +5,7 @@ environment:
     PYTHON_ARCH: "64"
     
     CONAN_UPLOAD: "https://conan.campar.in.tum.de"
-    CONAN_REFERENCE: "assimp/4.1.0"
+    CONAN_REFERENCE: "assimp/3.3.1"
     CONAN_USERNAME: "camposs"
     CONAN_CHANNEL: "stable"
     CONAN_STABLE_BRANCH_PATTERN: "release/*"
