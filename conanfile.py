@@ -45,13 +45,13 @@ conan_basic_setup()''')
         self.copy("*.h", dst="include", src="source/include")
         self.copy("*.hpp", dst="include", src="source/include")
         self.copy("*.inl", dst="include", src="source/include")
-        self.copy("*assimp.lib", dst="lib", keep_path=False)
+        self.copy("*assimp*.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="bin", keep_path=False)
         self.copy("*.so", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["assimp"]
+        self.cpp_info.libs = tools.collect_libs(self)
         is_apple = (self.settings.os == 'Macos' or self.settings.os == 'iOS')
         if self.settings.build_type == "Debug" and not is_apple:
             self.cpp_info.libs = [lib+'d' for lib in self.cpp_info.libs]
