@@ -35,6 +35,8 @@ conan_basic_setup()''')
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.definitions["ASSIMP_BUILD_TESTS"] = False
         cmake.definitions["ASSIMP_BUILD_SAMPLES"] = False
+        # pdb file installation fails on msvc
+        cmake.definitions["ASSIMP_INSTALL_PDB"] = False
         cmake.definitions["CMAKE_CXX_FLAGS"] = "-fPIC"
         cmake.definitions["CMAKE_C_FLAGS"] = "-fPIC"
         cmake.configure(source_dir="source")
