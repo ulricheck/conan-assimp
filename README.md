@@ -2,6 +2,10 @@
 
 [Conan.io](https://conan.io) package for [the assimp C++ library](https://github.com/assimp/assimp) project
 
+## Add Remote
+
+    $ conan remote add camposs "https://conan.campar.in.tum.de/api/conan/conan-camposs"
+
 ## For Users: Use this package
 
 ### Basic setup
@@ -26,23 +30,17 @@ Note: It is recommended that you run conan install from a build directory and no
 
 ## For Packagers: Publish this Package
 
-The example below shows the commands used to publish to ulricheck conan repository. To publish to your own conan respository (for example, after forking this git repository), you will need to change the commands below accordingly. 
+The example below shows the commands used to publish to campar conan repository. To publish to your own conan respository (for example, after forking this git repository), you will need to change the commands below accordingly. 
 
-## Build  
+## Build and package
 
-This is a header only library, so nothing needs to be built.
+The following command both runs all the steps of the conan file, and publishes the package to the local system cache.  This includes downloading dependencies from "build_requires" and "requires" , and then running the build() method.
 
-## Package 
-
-    $ conan create camposs/stable
-    
-## Add Remote
-
-    $ conan remote add camp "https://conan.campar.in.tum.de" True
+    $ conan create . camposs/stable
 
 ## Upload
 
-    $ conan upload -r camp assimp/4.1.0@camposs/stable
+    $ conan upload -r camposs assimp/4.1.0@camposs/stable
 
 ### License
 [License](https://raw.githubusercontent.com/assimp/assimp-c/master/COPYING)
